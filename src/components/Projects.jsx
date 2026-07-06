@@ -1,14 +1,17 @@
+import { motion } from 'framer-motion'
 import Section from './Section'
 import { projects } from '../data'
 
 export default function Projects() {
   return (
-    <Section id="projects" label="ls ~/projects" title="Projects">
+    <Section id="projects" title="Projects">
       <div className="grid gap-6 sm:grid-cols-2">
         {projects.map((project) => (
-          <div
+          <motion.div
             key={project.name}
-            className="flex flex-col rounded-lg border border-border bg-surface p-6 transition-colors hover:border-primary/50"
+            whileHover={{ y: -6 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            className="flex flex-col rounded-lg border border-border bg-surface p-6 transition-colors hover:border-primary/50 hover:shadow-[0_0_30px_-8px_var(--color-primary)]"
           >
             <h3 className="text-xl font-semibold text-heading">{project.name}</h3>
             <p className="mt-1 font-mono text-sm text-primary">{project.tagline}</p>
@@ -30,7 +33,7 @@ export default function Projects() {
                 </span>
               ))}
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </Section>

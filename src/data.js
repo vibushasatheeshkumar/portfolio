@@ -31,7 +31,7 @@ export const skillGroups = [
   },
   {
     label: 'Platforms',
-    skills: ['Linux', 'Kali Linux', 'Docker'],
+    skills: ['Linux', 'Kali Linux', 'Docker', 'Git', 'GitHub'],
   },
   {
     label: 'Programming',

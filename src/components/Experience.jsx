@@ -1,9 +1,9 @@
 import Section from './Section'
-import { experience, education, certifications } from '../data'
+import { experience, education } from '../data'
 
 export default function Experience() {
   return (
-    <Section id="experience" label="cat resume.txt" title="Experience & Education">
+    <Section id="experience" title="Experience & Education">
       <div className="grid gap-10 sm:grid-cols-2">
         <div>
           <h3 className="mb-4 font-mono text-sm font-semibold text-secondary">
@@ -23,8 +23,10 @@ export default function Experience() {
               </div>
             ))}
           </div>
+        </div>
 
-          <h3 className="mb-4 mt-8 font-mono text-sm font-semibold text-secondary">
+        <div>
+          <h3 className="mb-4 font-mono text-sm font-semibold text-secondary">
             Education
           </h3>
           <div className="space-y-6">
@@ -36,23 +38,6 @@ export default function Experience() {
               </div>
             ))}
           </div>
-        </div>
-
-        <div>
-          <h3 className="mb-4 font-mono text-sm font-semibold text-secondary">
-            Certifications
-          </h3>
-          <ul className="space-y-3">
-            {certifications.map((cert) => (
-              <li
-                key={cert}
-                className="flex items-start gap-2 rounded-md border border-border bg-surface px-4 py-3 text-sm text-text"
-              >
-                <span className="text-primary">✓</span>
-                <span>{cert}</span>
-              </li>
-            ))}
-          </ul>
         </div>
       </div>
     </Section>

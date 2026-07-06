@@ -1,10 +1,10 @@
 import { profile } from '../data'
 
 const links = [
-  { href: '#about', label: 'about' },
   { href: '#skills', label: 'skills' },
   { href: '#projects', label: 'projects' },
   { href: '#experience', label: 'experience' },
+  { href: '#certifications', label: 'certifications' },
   { href: '#achievements', label: 'achievements' },
   { href: '#contact', label: 'contact' },
 ]

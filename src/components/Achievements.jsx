@@ -1,19 +1,22 @@
+import { motion } from 'framer-motion'
 import Section from './Section'
 import { achievements } from '../data'
 
 export default function Achievements() {
   return (
-    <Section id="achievements" label="cat achievements.log" title="Achievements">
+    <Section id="achievements" title="Achievements">
       <div className="grid gap-6 sm:grid-cols-2">
         {achievements.map((item) => (
-          <div
+          <motion.div
             key={item.title}
-            className="rounded-lg border border-primary/30 bg-gradient-to-br from-primary/10 to-secondary/5 p-6"
+            whileHover={{ y: -6 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            className="rounded-lg border border-primary/30 bg-gradient-to-br from-primary/10 to-secondary/5 p-6 hover:shadow-[0_0_30px_-8px_var(--color-primary)]"
           >
             <p className="font-mono text-sm text-secondary">[disclosed]</p>
             <h3 className="mt-2 text-lg font-semibold text-heading">{item.title}</h3>
             <p className="mt-2 text-sm leading-relaxed text-text">{item.description}</p>
-          </div>
+          </motion.div>
         ))}
       </div>
     </Section>
