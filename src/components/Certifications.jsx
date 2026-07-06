@@ -4,7 +4,7 @@ import { certifications } from '../data'
 
 export default function Certifications() {
   return (
-    <Section id="certifications" title="Certifications">
+    <Section id="certifications" title="Certifications" shapeVariant={0}>
       <ul className="grid gap-3 sm:grid-cols-2">
         {certifications.map((cert) => (
           <motion.li

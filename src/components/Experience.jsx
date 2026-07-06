@@ -3,7 +3,7 @@ import { experience, education } from '../data'
 
 export default function Experience() {
   return (
-    <Section id="experience" title="Experience & Education">
+    <Section id="experience" title="Experience & Education" shapeVariant={1}>
       <div className="grid gap-10 sm:grid-cols-2">
         <div>
           <h3 className="mb-4 font-mono text-sm font-semibold text-secondary">

@@ -11,7 +11,7 @@ const links = [
 
 export default function Contact() {
   return (
-    <Section id="contact" title="Get In Touch">
+    <Section id="contact" title="Get In Touch" shapeVariant={1}>
       <p className="mb-8 max-w-xl text-text">
         Open to internships, CTF collaborations, and security research opportunities. Reach out through any of the channels below.
       </p>
@@ -26,7 +26,9 @@ export default function Contact() {
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
             className="group flex items-start gap-3 rounded-lg border border-border bg-surface p-5 transition-colors hover:border-primary/50 hover:shadow-[0_0_30px_-8px_var(--color-primary)]"
           >
-            <Icon className="mt-0.5 shrink-0 text-secondary" size={20} />
+            <span className="gradient-bg flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-white">
+              <Icon size={18} />
+            </span>
             <div>
               <p className="font-mono text-xs text-text-dim">{label}</p>
               <p className="mt-1 break-all font-mono text-sm text-heading group-hover:text-secondary">

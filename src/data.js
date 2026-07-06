@@ -98,9 +98,15 @@ export const achievements = [
   {
     title: 'GenXploit Hall of Fame',
     description: 'Identified and responsibly disclosed a Broken Access Control vulnerability in GenXploit.',
+    badge: 'Hall of Fame',
+    color: 'primary',
+    tags: ['Bug Bounty', 'Responsible Disclosure', 'Broken Access Control'],
   },
   {
     title: 'Appreciation Letter — Humphreys University',
     description: 'Reported a sensitive data exposure vulnerability affecting Humphreys University.',
+    badge: 'Appreciated',
+    color: 'secondary',
+    tags: ['Vulnerability Research', 'Responsible Disclosure', 'Sensitive Data Exposure'],
   },
 ]
