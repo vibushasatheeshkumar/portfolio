@@ -7,6 +7,7 @@ const links = [
   { href: '#certifications', label: 'certifications' },
   { href: '#achievements', label: 'achievements' },
   { href: '#contact', label: 'contact' },
+  { href: profile.medium, label: 'blog', external: true },
 ]
 
 export default function Navbar() {
@@ -20,7 +21,12 @@ export default function Navbar() {
         <ul className="hidden gap-6 font-mono text-sm text-text-dim sm:flex">
           {links.map((link) => (
             <li key={link.href}>
-              <a href={link.href} className="transition-colors hover:text-secondary">
+              <a
+                href={link.href}
+                target={link.external ? '_blank' : undefined}
+                rel={link.external ? 'noreferrer' : undefined}
+                className="transition-colors hover:text-secondary"
+              >
                 {link.label}
               </a>
             </li>

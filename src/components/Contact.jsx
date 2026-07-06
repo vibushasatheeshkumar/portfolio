@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { FaEnvelope, FaGithub, FaLinkedin } from 'react-icons/fa6'
+import { FaEnvelope, FaGithub, FaLinkedin, FaMedium } from 'react-icons/fa6'
 import Section from './Section'
 import { profile } from '../data'
 
@@ -7,6 +7,7 @@ const links = [
   { label: 'Email', value: profile.email, href: `mailto:${profile.email}`, Icon: FaEnvelope },
   { label: 'GitHub', value: profile.github.replace('https://', ''), href: profile.github, Icon: FaGithub },
   { label: 'LinkedIn', value: profile.linkedin.replace('https://', ''), href: profile.linkedin, Icon: FaLinkedin },
+  { label: 'Medium', value: profile.medium.replace('https://', ''), href: profile.medium, Icon: FaMedium },
 ]
 
 export default function Contact() {
@@ -15,7 +16,7 @@ export default function Contact() {
       <p className="mb-8 max-w-xl text-text">
         Open to internships, CTF collaborations, and security research opportunities. Reach out through any of the channels below.
       </p>
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {links.map(({ label, value, href, Icon }) => (
           <motion.a
             key={label}

@@ -1,10 +1,11 @@
 export const profile = {
   name: 'Vibusha',
   title: 'Cybersecurity Student',
-  bio: "Cybersecurity student pursuing a B.Tech in Computer Science and Engineering (Cybersecurity), with hands-on experience in penetration testing, detection engineering, and security monitoring. eJPT certified, with internship experience in offensive security and cloud security.",
+  bio: "Cybersecurity student pursuing a B.Tech in Computer Science and Engineering (Cybersecurity), with hands-on experience in penetration testing, detection engineering, and security monitoring. eJPT and CRTOM certified, with internship experience across offensive security and cloud security. I like taking things apart to see how they break — from building detection pipelines mapped to MITRE ATT&CK to hunting real vulnerabilities through responsible disclosure. Currently sharpening my red-teaming and cloud security skills, with an eye on a career in offensive security and threat detection.",
   email: 'vibushasatheeshkumar@gmail.com',
   github: 'https://github.com/vibushasatheeshkumar',
   linkedin: 'https://linkedin.com/in/vibushasatheeshkumar',
+  medium: 'https://medium.com/@vibushasatheeshkumar',
 }
 
 export const skillGroups = [
