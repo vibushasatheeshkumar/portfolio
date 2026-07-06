@@ -12,8 +12,6 @@ const groupIcons = {
   Programming: FaCode,
 }
 
-const allTools = [...new Set(skillGroups.flatMap((g) => g.skills))]
-
 export default function Skills() {
   return (
     <Section id="skills" title="Technical Skills" shapeVariant={0}>
@@ -51,26 +49,6 @@ export default function Skills() {
             </div>
           )
         })}
-      </div>
-
-      <div className="mt-10 overflow-hidden rounded-xl border border-border bg-surface py-4">
-        <p className="mb-3 px-5 font-mono text-xs text-text-dim">
-          <span className="text-secondary">&gt;</span> tools_in_use
-        </p>
-        <div className="flex w-max gap-3 px-5 marquee-track">
-          {[...allTools, ...allTools].map((tool, i) => {
-            const Icon = skillIcons[tool] || defaultSkillIcon
-            return (
-              <span
-                key={`${tool}-${i}`}
-                className="flex shrink-0 items-center gap-1.5 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5 font-mono text-xs text-secondary"
-              >
-                <Icon size={12} />
-                {tool}
-              </span>
-            )
-          })}
-        </div>
       </div>
     </Section>
   )

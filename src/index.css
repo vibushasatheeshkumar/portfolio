@@ -77,22 +77,8 @@ body {
   animation: float-slow 7s ease-in-out infinite;
 }
 
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-.marquee-track {
-  animation: marquee 30s linear infinite;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .float-shape,
-  .marquee-track {
+  .float-shape {
     animation: none;
   }
 }
