@@ -107,9 +107,9 @@ export const education = [
 
 export const achievements = [
   {
-    title: 'AI Web Solutions Ltd. Hall of Fame',
+    title: 'AI Web Solutions Ltd. – Hall of Fame',
     description:
-      'Discovered an unauthenticated privilege escalation vulnerability in the public registration endpoint (POST /api/v1/auth/register) that allowed an attacker to create a platform Superadmin account by supplying a privileged role value during registration. After completing standard email verification, the newly created account received a JWT containing the Superadmin role and could successfully access administrative endpoints normally restricted to privileged users.',
+      'Recognized for responsibly disclosing an unauthenticated privilege escalation vulnerability in the registration workflow that allowed unauthorized creation of a Superadmin account through improper role assignment during user registration.',
     badge: 'Hall of Fame',
     color: 'primary',
     tags: ['Bug Bounty', 'Responsible Disclosure', 'Privilege Escalation', 'Broken Access Control'],
