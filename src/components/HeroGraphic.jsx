@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
-import { FaShieldHalved, FaLock, FaTerminal, FaBug } from 'react-icons/fa6'
+import { FaLock, FaTerminal, FaBug } from 'react-icons/fa6'
+import profilePhoto from '../assets/profile.jpeg'
 
 export default function HeroGraphic() {
   return (
@@ -16,8 +17,8 @@ export default function HeroGraphic() {
       />
       <div className="absolute inset-10 rounded-full bg-gradient-to-br from-primary/20 to-secondary/10 blur-2xl" />
 
-      <div className="relative flex h-32 w-32 items-center justify-center rounded-full border border-border bg-surface shadow-[0_0_60px_-10px_var(--color-primary)]">
-        <FaShieldHalved className="text-primary" size={48} />
+      <div className="relative flex h-40 w-40 items-center justify-center overflow-hidden rounded-full border border-border bg-surface shadow-[0_0_60px_-10px_var(--color-primary)]">
+        <img src={profilePhoto} alt="Vibusha" className="h-full w-full object-cover" />
       </div>
 
       <span className="float-shape absolute left-0 top-6 flex h-10 w-10 items-center justify-center rounded-xl border border-secondary/40 bg-surface text-secondary">
