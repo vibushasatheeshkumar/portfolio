@@ -42,6 +42,16 @@ export const skillGroups = [
 
 export const projects = [
   {
+    name: 'CogniShield AI',
+    tagline: 'Enterprise AI Security Intelligence & Cloud Governance Platform',
+    points: [
+      'Built a full-stack SOC dashboard where AI thinks like a security analyst — combining threat detection, simulated cloud security posture, and a data-engineering ETL pipeline.',
+      'Implemented hybrid ML + rule-based detection with anomaly detection, risk scoring, MITRE ATT&CK mapping, and automated compliance checks.',
+      'Added a generative AI copilot for chat-based investigation, with one-click synthetic dataset generation or custom login/auth-log CSV upload — no API key, login, or cloud account required.',
+    ],
+    stack: ['Python', 'Machine Learning', 'ETL', 'MITRE ATT&CK', 'Generative AI', 'Cloud Security'],
+  },
+  {
     name: 'Watchtower',
     tagline: 'AI-Powered SOC & Detection Engineering Platform',
     points: [
@@ -96,6 +106,14 @@ export const education = [
 ]
 
 export const achievements = [
+  {
+    title: 'AI Web Solutions Ltd. Hall of Fame',
+    description:
+      'Discovered an unauthenticated privilege escalation vulnerability in the public registration endpoint (POST /api/v1/auth/register) that allowed an attacker to create a platform Superadmin account by supplying a privileged role value during registration. After completing standard email verification, the newly created account received a JWT containing the Superadmin role and could successfully access administrative endpoints normally restricted to privileged users.',
+    badge: 'Hall of Fame',
+    color: 'primary',
+    tags: ['Bug Bounty', 'Responsible Disclosure', 'Privilege Escalation', 'Broken Access Control'],
+  },
   {
     title: 'GenXploit Hall of Fame',
     description: 'Identified and responsibly disclosed a Broken Access Control vulnerability in GenXploit.',

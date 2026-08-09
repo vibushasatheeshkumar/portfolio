@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion'
-import { FaSatelliteDish, FaFileShield } from 'react-icons/fa6'
+import { FaSatelliteDish, FaFileShield, FaShieldHalved } from 'react-icons/fa6'
 import Section from './Section'
 import { projects } from '../data'
 
 const projectIcons = {
+  'CogniShield AI': FaShieldHalved,
   Watchtower: FaSatelliteDish,
   MallnSight: FaFileShield,
 }
