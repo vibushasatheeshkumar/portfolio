@@ -1,77 +1,144 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { FaLock, FaTerminal, FaBug } from 'react-icons/fa6'
 import profilePhoto from '../assets/profile.jpeg'
+import { EASE } from '../motion'
 
 const badges = [
-  { Icon: FaLock, className: 'top-2 -left-2', accent: 'text-primary border-primary-line' },
-  { Icon: FaTerminal, className: 'top-1/2 -right-3 -translate-y-1/2', accent: 'text-secondary border-secondary-line' },
-  { Icon: FaBug, className: '-bottom-2 left-10', accent: 'text-primary border-primary-line' },
+  { Icon: FaLock, label: 'lock', className: 'top-3 -left-1', tone: 'text-primary border-primary-line' },
+  {
+    Icon: FaTerminal,
+    label: 'terminal',
+    className: 'top-1/2 -right-2 -translate-y-1/2',
+    tone: 'text-secondary border-secondary-line',
+  },
+  { Icon: FaBug, label: 'bug', className: '-bottom-1 left-12', tone: 'text-primary border-primary-line' },
 ]
+
+// Evenly spaced tick marks around the instrument ring.
+const TICKS = Array.from({ length: 36 }, (_, i) => i * 10)
 
 export default function HeroGraphic() {
   const reduced = useReducedMotion()
-  const spin = (duration, direction = 1) =>
-    reduced ? undefined : { rotate: 360 * direction, transition: { duration, repeat: Infinity, ease: 'linear' } }
 
   return (
-    <div className="relative mx-auto flex h-72 w-72 items-center justify-center sm:h-80 sm:w-80">
-      {/* Rotating rings — transform-only, so they stay on the compositor. */}
-      <motion.div
+    <div className="relative mx-auto flex h-[19rem] w-[19rem] items-center justify-center sm:h-[21rem] sm:w-[21rem]">
+      {/* Outer dashed ring — clipped to a circle so its rotated bounding box
+          never reaches past the painted circle. */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-full" aria-hidden="true">
+        <div className="spin-slow absolute inset-px rounded-full border border-dashed border-border-strong" />
+      </div>
+
+      {/* Tick ring */}
+      <svg
+        viewBox="0 0 200 200"
+        className="pointer-events-none absolute inset-[8%]"
         aria-hidden="true"
-        className="absolute inset-0 rounded-full border border-dashed border-border-strong"
-        animate={spin(44)}
-      />
-      <motion.div
-        aria-hidden="true"
-        className="absolute inset-5 rounded-full border border-primary/20"
-        animate={spin(30, -1)}
+        fill="none"
       >
-        <span className="absolute -top-[3px] left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-primary shadow-[0_0_10px_var(--color-primary)]" />
-      </motion.div>
+        <circle cx="100" cy="100" r="96" stroke="var(--color-border)" strokeWidth="1" />
+        {TICKS.map((deg, i) => (
+          <line
+            key={deg}
+            x1="100"
+            y1="6"
+            x2="100"
+            y2={i % 3 === 0 ? 15 : 11}
+            stroke={i % 9 === 0 ? 'var(--color-primary)' : 'var(--color-border-strong)'}
+            strokeWidth={i % 9 === 0 ? 1.6 : 1}
+            transform={`rotate(${deg} 100 100)`}
+            opacity={i % 9 === 0 ? 0.9 : 0.6}
+          />
+        ))}
+      </svg>
 
-      {/* Ambient accent bloom */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-12 rounded-full bg-primary/10 blur-3xl"
-      />
+      {/* Radar sweep, masked to the ring band */}
+      {!reduced && (
+        <div
+          className="pointer-events-none absolute inset-[14%] overflow-hidden rounded-full"
+          aria-hidden="true"
+        >
+          <div className="radar absolute inset-0 rounded-full" />
+        </div>
+      )}
 
-      {/* Photo frame with corner brackets */}
-      <div className="relative h-44 w-44 sm:h-48 sm:w-48">
-        <div className="panel glow-accent h-full w-full overflow-hidden rounded-2xl">
+      {/* Counter-rotating inner ring with an orbiting node */}
+      <div className="pointer-events-none absolute inset-[18%]" aria-hidden="true">
+        <div className="spin-reverse relative h-full w-full rounded-full border border-primary/20">
+          <span className="absolute -top-[3.5px] left-1/2 h-[7px] w-[7px] -translate-x-1/2 rounded-full bg-primary shadow-[0_0_12px_var(--color-primary)]" />
+          <span className="absolute top-1/2 -right-[3px] h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-secondary/70" />
+        </div>
+      </div>
+
+      {/* Ambient bloom */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-[22%] rounded-full bg-primary/10 blur-3xl" />
+
+      {/* Photo frame */}
+      <motion.div
+        className="group relative h-[10.5rem] w-[10.5rem] sm:h-[11.5rem] sm:w-[11.5rem]"
+        initial={reduced ? false : { opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.9, ease: EASE, delay: 0.3 }}
+      >
+        <div className="panel elev-2 relative h-full w-full overflow-hidden rounded-[1.25rem]">
           <img
             src={profilePhoto}
             alt="Vibusha Satheeshkumar"
-            width="192"
-            height="192"
-            className="h-full w-full object-cover grayscale-[35%] transition-[filter] duration-500 hover:grayscale-0"
+            width="184"
+            height="184"
+            className="h-full w-full object-cover grayscale-[45%] contrast-[1.05] transition-[filter] duration-700 group-hover:grayscale-0"
+          />
+          {/* Tint + top-down fade keep the photo inside the palette */}
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-bg/70 via-transparent to-transparent"
           />
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-bg/55 via-transparent to-transparent"
+            className="pointer-events-none absolute inset-0 bg-primary/[0.07] mix-blend-overlay"
           />
+          {!reduced && (
+            <span
+              aria-hidden="true"
+              className="scanline pointer-events-none absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-transparent via-primary/[0.09] to-transparent"
+            />
+          )}
         </div>
 
-        {['-top-1.5 -left-1.5 border-t-2 border-l-2', '-top-1.5 -right-1.5 border-t-2 border-r-2', '-bottom-1.5 -left-1.5 border-b-2 border-l-2', '-bottom-1.5 -right-1.5 border-b-2 border-r-2'].map(
-          (position) => (
-            <span
-              key={position}
-              aria-hidden="true"
-              className={`absolute h-4 w-4 border-primary ${position}`}
-            />
-          ),
-        )}
-      </div>
+        {/* Static corner brackets framing the portrait */}
+        {[
+          '-top-2 -left-2 border-t-2 border-l-2 rounded-tl-md',
+          '-top-2 -right-2 border-t-2 border-r-2 rounded-tr-md',
+          '-bottom-2 -left-2 border-b-2 border-l-2 rounded-bl-md',
+          '-bottom-2 -right-2 border-b-2 border-r-2 rounded-br-md',
+        ].map((position) => (
+          <span
+            key={position}
+            aria-hidden="true"
+            className={`absolute h-5 w-5 border-primary/70 ${position}`}
+          />
+        ))}
+      </motion.div>
 
-      {badges.map(({ Icon, className, accent }, i) => (
+      {/* Floating capability badges */}
+      {badges.map(({ Icon, label, className, tone }, i) => (
         <motion.span
-          key={className}
+          key={label}
           aria-hidden="true"
-          className={`panel absolute flex h-10 w-10 items-center justify-center rounded-xl border ${accent} ${className}`}
-          animate={reduced ? undefined : { y: [0, -7, 0] }}
+          className={`panel elev-1 absolute flex h-10 w-10 items-center justify-center rounded-xl border ${tone} ${className}`}
+          initial={reduced ? false : { opacity: 0, scale: 0.6 }}
+          animate={
+            reduced
+              ? { opacity: 1, scale: 1 }
+              : { opacity: 1, scale: 1, y: [0, -7, 0] }
+          }
           transition={
             reduced
               ? undefined
-              : { duration: 4.5 + i, repeat: Infinity, ease: 'easeInOut', delay: i * 0.6 }
+              : {
+                  opacity: { duration: 0.4, delay: 0.7 + i * 0.12 },
+                  scale: { duration: 0.5, ease: EASE, delay: 0.7 + i * 0.12 },
+                  y: { duration: 4.5 + i, repeat: Infinity, ease: 'easeInOut', delay: i * 0.6 },
+                }
           }
         >
           <Icon size={14} />

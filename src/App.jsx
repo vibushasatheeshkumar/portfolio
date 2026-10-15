@@ -16,6 +16,7 @@ function App() {
       {/* Layered ambient backdrop: static grid + accent vignette + particle field */}
       <div className="grid-backdrop" aria-hidden="true" />
       <div className="vignette" aria-hidden="true" />
+      <div className="grain" aria-hidden="true" />
       <ParticleBackground />
 
       <a

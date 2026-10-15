@@ -1,8 +1,9 @@
 import { motion, useReducedMotion } from 'framer-motion'
-import { fadeUp, pick, stagger, viewportOnce } from '../motion'
+import { EASE, fadeUp, pick, pickMask, stagger, viewportOnce } from '../motion'
 
 export default function Section({ id, index, title, kicker, intro, children }) {
   const reduced = useReducedMotion()
+  const mask = pickMask(reduced)
 
   return (
     <section id={id} className="relative mx-auto max-w-6xl scroll-mt-24 px-6 py-20 sm:py-28">
@@ -18,17 +19,27 @@ export default function Section({ id, index, title, kicker, intro, children }) {
             variants={pick(fadeUp, reduced)}
             className="flex items-center gap-3 font-mono text-xs tracking-[0.18em] text-text-dim uppercase"
           >
-            {index != null && <span className="text-primary">{String(index).padStart(2, '0')}</span>}
-            <span className="h-px w-8 bg-border-strong" aria-hidden="true" />
+            {index != null && (
+              <span className="text-primary tabular-nums">{String(index).padStart(2, '0')}</span>
+            )}
+            <motion.span
+              aria-hidden="true"
+              className="h-px w-10 origin-left bg-border-strong"
+              initial={reduced ? false : { scaleX: 0 }}
+              whileInView={reduced ? undefined : { scaleX: 1 }}
+              viewport={viewportOnce}
+              transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}
+            />
             <span>{kicker || title}</span>
           </motion.div>
 
-          <motion.h2
-            variants={pick(fadeUp, reduced)}
-            className="font-display mt-4 text-3xl font-bold text-heading sm:text-5xl"
-          >
-            {title}
-          </motion.h2>
+          <h2 className="font-display display-tight mt-4 text-3xl font-bold text-heading sm:text-5xl">
+            <span className="mask-line">
+              <motion.span variants={mask} className="inline-block">
+                {title}
+              </motion.span>
+            </span>
+          </h2>
 
           <motion.span
             aria-hidden="true"
@@ -36,13 +47,13 @@ export default function Section({ id, index, title, kicker, intro, children }) {
             initial={reduced ? false : { scaleX: 0 }}
             whileInView={reduced ? undefined : { scaleX: 1 }}
             viewport={viewportOnce}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+            transition={{ duration: 0.7, ease: EASE, delay: 0.2 }}
           />
 
           {intro && (
             <motion.p
               variants={pick(fadeUp, reduced)}
-              className="text-balance mt-6 max-w-2xl text-base leading-relaxed text-text"
+              className="text-pretty mt-6 max-w-2xl text-base leading-relaxed text-text"
             >
               {intro}
             </motion.p>

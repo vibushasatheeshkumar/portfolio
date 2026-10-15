@@ -1,8 +1,15 @@
 import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from 'framer-motion'
-import { FaSatelliteDish, FaFileShield, FaShieldHalved, FaGithub, FaArrowUpRightFromSquare } from 'react-icons/fa6'
+import {
+  FaSatelliteDish,
+  FaFileShield,
+  FaShieldHalved,
+  FaGithub,
+  FaArrowUpRightFromSquare,
+} from 'react-icons/fa6'
 import Section from './Section'
 import { projects } from '../data'
-import { fadeUp, pick, stagger, viewportOnce } from '../motion'
+import { pick, riseIn, stagger, viewportOnce } from '../motion'
+import useSpotlight from '../useSpotlight'
 
 const projectIcons = {
   'CogniShield AI': FaShieldHalved,
@@ -10,17 +17,25 @@ const projectIcons = {
   MallnSight: FaFileShield,
 }
 
-const TILT = 7 // max degrees of rotation
+const TILT = 6 // max degrees of rotation
 const SPRING = { stiffness: 220, damping: 22, mass: 0.6 }
+
+const CORNERS = [
+  'top-3 left-3 border-t border-l rounded-tl-sm',
+  'top-3 right-3 border-t border-r rounded-tr-sm',
+  'bottom-3 left-3 border-b border-l rounded-bl-sm',
+  'bottom-3 right-3 border-b border-r rounded-br-sm',
+]
 
 /**
  * The whole card is a single anchor to the repository, so there are no nested
- * interactive elements and the card is reachable with Tab. Pointer tilt is
- * mouse-only and is skipped entirely when reduced motion is preferred.
+ * interactive elements and the card is reachable with Tab. Pointer tilt and
+ * lighting are mouse-only and are skipped under reduced motion.
  */
-function ProjectCard({ project }) {
+function ProjectCard({ project, index }) {
   const Icon = projectIcons[project.name] || FaSatelliteDish
   const reduced = useReducedMotion()
+  const spotlight = useSpotlight()
 
   const px = useMotionValue(0)
   const py = useMotionValue(0)
@@ -28,13 +43,15 @@ function ProjectCard({ project }) {
   const rotateX = useSpring(useTransform(py, [-0.5, 0.5], [TILT, -TILT]), SPRING)
 
   const handlePointerMove = (event) => {
+    spotlight.onPointerMove(event)
     if (reduced || event.pointerType !== 'mouse') return
     const rect = event.currentTarget.getBoundingClientRect()
     px.set((event.clientX - rect.left) / rect.width - 0.5)
     py.set((event.clientY - rect.top) / rect.height - 0.5)
   }
 
-  const resetTilt = () => {
+  const handlePointerLeave = (event) => {
+    spotlight.onPointerLeave(event)
     px.set(0)
     py.set(0)
   }
@@ -45,28 +62,35 @@ function ProjectCard({ project }) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`${project.name} — ${project.tagline}. Opens the GitHub repository in a new tab.`}
-      variants={pick(fadeUp, reduced)}
+      variants={pick(riseIn, reduced)}
       onPointerMove={handlePointerMove}
-      onPointerLeave={resetTilt}
-      onBlur={resetTilt}
-      whileHover={reduced ? undefined : { y: -6 }}
+      onPointerLeave={handlePointerLeave}
+      onBlur={() => {
+        px.set(0)
+        py.set(0)
+      }}
+      whileHover={reduced ? undefined : { y: -8 }}
       transition={{ type: 'spring', ...SPRING }}
-      style={reduced ? undefined : { rotateX, rotateY, transformPerspective: 900 }}
-      className="panel card-ring group relative flex flex-col rounded-xl p-6 transition-shadow duration-300 hover:shadow-[0_18px_50px_-24px_rgba(0,0,0,0.9),0_0_30px_-18px_var(--color-primary)]"
+      style={reduced ? undefined : { rotateX, rotateY, transformPerspective: 1000 }}
+      className="panel elev-1 card-ring spotlight group relative flex flex-col rounded-xl p-6 transition-shadow duration-300 hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.07),0_28px_60px_-28px_rgba(0,0,0,0.95),0_0_40px_-22px_var(--color-primary)]"
     >
-      {/* Accent top edge that grows on hover */}
-      <span
-        aria-hidden="true"
-        className="absolute inset-x-6 top-0 h-px origin-left scale-x-0 bg-gradient-to-r from-primary to-transparent transition-transform duration-500 group-hover:scale-x-100 group-focus-visible:scale-x-100"
-      />
+      <span className="edge-accent" aria-hidden="true" />
+      {CORNERS.map((position) => (
+        <span key={position} className={`corner ${position}`} aria-hidden="true" />
+      ))}
 
-      <div className="flex items-start gap-3">
-        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-border bg-surface-2 text-primary transition-colors duration-300 group-hover:border-primary-line">
+      <div className="relative flex items-start gap-3.5">
+        <span className="panel-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-primary transition-colors duration-300 group-hover:border-primary-line">
           <Icon size={17} aria-hidden="true" />
         </span>
         <div className="min-w-0 flex-1">
-          <h3 className="font-display text-lg font-semibold text-heading">{project.name}</h3>
-          <p className="mt-0.5 font-mono text-[11px] leading-snug text-primary">{project.tagline}</p>
+          <div className="flex items-center gap-2">
+            <h3 className="font-display text-lg font-semibold text-heading">{project.name}</h3>
+            <span className="font-mono text-[10px] text-text-dim" aria-hidden="true">
+              {String(index + 1).padStart(2, '0')}
+            </span>
+          </div>
+          <p className="mt-1 font-mono text-[11px] leading-snug text-primary">{project.tagline}</p>
         </div>
         <FaArrowUpRightFromSquare
           size={12}
@@ -75,29 +99,36 @@ function ProjectCard({ project }) {
         />
       </div>
 
-      <ul className="mt-5 flex-1 space-y-2.5 text-sm leading-relaxed text-text">
+      <ul className="relative mt-5 flex-1 space-y-2.5 text-sm leading-relaxed text-text">
         {project.points.map((point) => (
           <li key={point} className="flex gap-2.5">
-            <span aria-hidden="true" className="mt-[0.45rem] h-1 w-1 shrink-0 rounded-full bg-primary/60" />
+            <span
+              aria-hidden="true"
+              className="mt-[0.45rem] h-1 w-1 shrink-0 rounded-full bg-primary/60 transition-colors duration-300 group-hover:bg-primary"
+            />
             <span>{point}</span>
           </li>
         ))}
       </ul>
 
-      <div className="mt-5 flex flex-wrap gap-1.5">
+      <div className="relative mt-5 flex flex-wrap gap-1.5">
         {project.stack.map((tech) => (
           <span
             key={tech}
-            className="rounded border border-border bg-surface-2 px-2 py-0.5 font-mono text-[11px] text-text-dim"
+            className="rounded border border-border bg-surface-2 px-2 py-0.5 font-mono text-[11px] text-text-dim transition-colors duration-300 group-hover:border-border-strong"
           >
             {tech}
           </span>
         ))}
       </div>
 
-      <span className="mt-5 inline-flex items-center gap-2 border-t border-border pt-4 font-mono text-[11px] text-text-dim transition-colors duration-300 group-hover:text-primary">
+      <span className="relative mt-5 inline-flex items-center gap-2 border-t border-border pt-4 font-mono text-[11px] text-text-dim transition-colors duration-300 group-hover:text-primary">
         <FaGithub size={12} aria-hidden="true" />
         view repository
+        <span
+          aria-hidden="true"
+          className="ml-auto h-px w-0 bg-primary/50 transition-all duration-500 group-hover:w-10"
+        />
       </span>
     </motion.a>
   )
@@ -119,8 +150,8 @@ export default function Projects() {
         viewport={viewportOnce}
         className="grid gap-5 md:grid-cols-2 lg:grid-cols-3"
       >
-        {projects.map((project) => (
-          <ProjectCard key={project.name} project={project} />
+        {projects.map((project, i) => (
+          <ProjectCard key={project.name} project={project} index={i} />
         ))}
       </motion.div>
     </Section>

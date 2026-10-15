@@ -26,6 +26,8 @@
   --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', Consolas, monospace;
   --font-sans: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
   --font-display: 'Space Grotesk', system-ui, sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 html {
@@ -48,15 +50,24 @@ body {
   color: #04120a;
 }
 
-/* ---------- Typography helpers ---------- */
+/* ---------- Typography ---------- */
 
 .font-display {
   font-family: var(--font-display);
   letter-spacing: -0.02em;
 }
 
+.display-tight {
+  letter-spacing: -0.035em;
+  line-height: 0.96;
+}
+
 .text-balance {
   text-wrap: balance;
+}
+
+.text-pretty {
+  text-wrap: pretty;
 }
 
 .label-mono {
@@ -67,13 +78,42 @@ body {
   color: var(--color-text-dim);
 }
 
-/* ---------- Surfaces, borders, glow ---------- */
+/* Mask-reveal: the child slides up from behind a clipped parent. */
+.mask-line {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-bottom: 0.08em;
+}
+
+/* ---------- Surfaces & depth ---------- */
 
 .panel {
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0) 55%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.028), rgba(255, 255, 255, 0) 55%),
     var(--color-surface);
   border: 1px solid var(--color-border);
+}
+
+.panel-2 {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0) 60%),
+    var(--color-surface-2);
+  border: 1px solid var(--color-border);
+}
+
+/* Elevation: a 1px inner highlight on the top edge plus a soft cast shadow. */
+.elev-1 {
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.045),
+    0 10px 28px -18px rgba(0, 0, 0, 0.9);
+}
+
+.elev-2 {
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.06),
+    0 24px 60px -30px rgba(0, 0, 0, 0.95),
+    0 6px 18px -12px rgba(0, 0, 0, 0.8);
 }
 
 .hairline {
@@ -102,18 +142,25 @@ body {
   text-shadow: 0 0 32px rgba(78, 240, 141, 0.35);
 }
 
-/* Fine grid, fixed behind everything. Static — no animation cost. */
+/* ---------- Ambient backdrop ---------- */
+
 .grid-backdrop {
   position: fixed;
   inset: 0;
   z-index: -20;
   pointer-events: none;
   background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.028) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image: radial-gradient(ellipse 85% 70% at 50% 0%, #000 35%, transparent 85%);
-  -webkit-mask-image: radial-gradient(ellipse 85% 70% at 50% 0%, #000 35%, transparent 85%);
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to right, rgba(255, 255, 255, 0.016) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.016) 1px, transparent 1px);
+  background-size:
+    112px 112px,
+    112px 112px,
+    28px 28px,
+    28px 28px;
+  mask-image: radial-gradient(ellipse 85% 70% at 50% 0%, #000 30%, transparent 85%);
+  -webkit-mask-image: radial-gradient(ellipse 85% 70% at 50% 0%, #000 30%, transparent 85%);
 }
 
 .vignette {
@@ -122,11 +169,22 @@ body {
   z-index: -19;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 60% 40% at 50% -5%, rgba(78, 240, 141, 0.07), transparent 70%),
-    radial-gradient(ellipse 45% 35% at 92% 8%, rgba(34, 211, 238, 0.05), transparent 70%);
+    radial-gradient(ellipse 60% 42% at 50% -6%, rgba(78, 240, 141, 0.075), transparent 70%),
+    radial-gradient(ellipse 45% 35% at 92% 6%, rgba(34, 211, 238, 0.05), transparent 70%),
+    radial-gradient(ellipse 70% 50% at 50% 104%, rgba(0, 0, 0, 0.75), transparent 60%);
 }
 
-/* ---------- Focus states ---------- */
+/* Very fine film grain, keeps large dark areas from banding. */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: -18;
+  pointer-events: none;
+  opacity: 0.4;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+}
+
+/* ---------- Focus ---------- */
 
 :focus-visible {
   outline: 2px solid var(--color-primary);
@@ -134,7 +192,7 @@ body {
   border-radius: 4px;
 }
 
-/* ---------- Animated underline for nav / inline links ---------- */
+/* ---------- Links ---------- */
 
 .link-underline {
   position: relative;
@@ -150,7 +208,7 @@ body {
   background: var(--color-primary);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.32s var(--ease-out-expo);
 }
 
 .link-underline:hover::after,
@@ -159,7 +217,7 @@ body {
   transform: scaleX(1);
 }
 
-/* ---------- Sweep highlight used on primary buttons ---------- */
+/* ---------- Buttons ---------- */
 
 .btn-sweep {
   position: relative;
@@ -174,7 +232,7 @@ body {
   z-index: -1;
   background: linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.22), transparent 80%);
   transform: translateX(-120%);
-  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.6s var(--ease-out-expo);
 }
 
 .btn-sweep:hover::before,
@@ -182,8 +240,9 @@ body {
   transform: translateX(120%);
 }
 
-/* ---------- Card hover: border glow via a masked gradient ring ---------- */
+/* ---------- Cards ---------- */
 
+/* Gradient border ring, revealed on hover/focus. */
 .card-ring {
   position: relative;
 }
@@ -212,6 +271,71 @@ body {
 .card-ring:focus-visible::after,
 .card-ring:focus-within::after {
   opacity: 1;
+}
+
+/* Pointer-tracked lighting. --mx/--my are set in JS (mouse only). */
+.spotlight::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    360px circle at var(--mx, 50%) var(--my, 0%),
+    rgba(78, 240, 141, 0.11),
+    rgba(78, 240, 141, 0.04) 38%,
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.spotlight:hover::before,
+.spotlight:focus-visible::before,
+.spotlight:focus-within::before {
+  opacity: 1;
+}
+
+/* Thin accent edge that draws across the top of a card. */
+.edge-accent {
+  position: absolute;
+  left: 1.5rem;
+  right: 1.5rem;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--color-primary), transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.55s var(--ease-out-expo);
+  pointer-events: none;
+}
+
+.group:hover .edge-accent,
+.group:focus-visible .edge-accent,
+.group:focus-within .edge-accent {
+  transform: scaleX(1);
+}
+
+/* Corner brackets that expand on hover. */
+.corner {
+  position: absolute;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-color: var(--color-primary);
+  opacity: 0;
+  transition:
+    opacity 0.35s ease,
+    width 0.35s var(--ease-out-expo),
+    height 0.35s var(--ease-out-expo);
+  pointer-events: none;
+}
+
+.group:hover .corner,
+.group:focus-visible .corner,
+.group:focus-within .corner {
+  opacity: 0.9;
+  width: 1.05rem;
+  height: 1.05rem;
 }
 
 /* ---------- Keyframes ---------- */
@@ -248,20 +372,63 @@ body {
   animation: scan-down 4.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
 }
 
-@keyframes orbit-dash {
+@keyframes spin-slow {
   to {
-    stroke-dashoffset: -1000;
+    transform: rotate(360deg);
   }
 }
 
-.orbit-dash {
-  animation: orbit-dash 26s linear infinite;
+@keyframes spin-reverse {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.spin-slow {
+  animation: spin-slow 44s linear infinite;
+  will-change: transform;
+}
+
+.spin-reverse {
+  animation: spin-reverse 30s linear infinite;
+  will-change: transform;
+}
+
+/* Radar sweep: one rotating conic wedge. */
+.radar {
+  background: conic-gradient(
+    from 0deg,
+    rgba(78, 240, 141, 0.22),
+    rgba(78, 240, 141, 0.05) 18%,
+    transparent 34%
+  );
+  animation: spin-slow 7.5s linear infinite;
+  will-change: transform;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.55;
+  }
+  70% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+.pulse-ring {
+  animation: pulse-ring 3s var(--ease-out-expo) infinite;
 }
 
 @keyframes pulse-soft {
   0%,
   100% {
-    opacity: 0.55;
+    opacity: 0.5;
   }
   50% {
     opacity: 1;
@@ -293,7 +460,14 @@ body {
     opacity: 1;
   }
 
-  .scanline {
+  .scanline,
+  .radar,
+  .pulse-ring {
     display: none;
+  }
+
+  .spin-slow,
+  .spin-reverse {
+    animation: none;
   }
 }
