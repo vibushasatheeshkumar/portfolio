@@ -3,6 +3,7 @@ import { FaFileArrowDown, FaArrowRight, FaShieldHalved, FaArrowDown } from 'reac
 import { profile } from '../data'
 import { resumeUrl } from '../links'
 import { EASE, fadeUp, pick, pickMask, stagger } from '../motion'
+import MagneticLink from './MagneticLink'
 import TypingText from './TypingText'
 import HeroGraphic from './HeroGraphic'
 import Terminal from './Terminal'
@@ -68,17 +69,19 @@ export default function Hero() {
           </motion.p>
 
           <motion.div variants={pick(fadeUp, reduced)} className="mt-9 flex flex-wrap items-center gap-3">
-            <a
+            <MagneticLink
               href={resumeUrl}
               download
+              strength={5}
               aria-label="Download resume as PDF"
               className="btn-sweep group inline-flex items-center gap-2.5 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-bg shadow-[0_0_0_1px_var(--color-primary-line),0_14px_34px_-16px_var(--color-primary)] transition-shadow duration-300 hover:shadow-[0_0_0_1px_var(--color-primary),0_16px_40px_-12px_var(--color-primary)]"
             >
               <FaFileArrowDown size={14} aria-hidden="true" />
               Download Resume
-            </a>
-            <a
+            </MagneticLink>
+            <MagneticLink
               href="#projects"
+              strength={4}
               className="panel elev-1 group inline-flex items-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold text-text transition-colors duration-300 hover:border-primary-line hover:text-primary"
             >
               View Projects
@@ -87,7 +90,7 @@ export default function Hero() {
                 aria-hidden="true"
                 className="transition-transform duration-300 group-hover:translate-x-1"
               />
-            </a>
+            </MagneticLink>
             <a
               href="#contact"
               className="link-underline inline-flex items-center px-2 py-3 font-mono text-sm text-text-dim transition-colors duration-200 hover:text-heading"

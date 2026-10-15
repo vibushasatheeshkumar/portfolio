@@ -118,6 +118,36 @@ export default function Research() {
       intro="Vulnerabilities I have reported through coordinated disclosure. Published advisories and vendor acknowledgements are linked to their official evidence; entries without a public record are listed separately."
     >
       <div className="space-y-14">
+        {/* Index strip — counts of the entries listed below, nothing more. */}
+        <motion.dl
+          variants={pick(fadeUp, reduced)}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+          className="panel elev-1 -mt-2 grid grid-cols-2 overflow-hidden rounded-xl sm:grid-cols-4"
+        >
+          {[
+            { label: 'recognition', value: research.recognition.length },
+            { label: 'published advisories', value: research.advisories.length },
+            { label: 'resolved & acknowledged', value: research.resolved.length },
+            { label: 'other disclosures', value: research.disclosures.length },
+          ].map((item, i) => (
+            <div
+              key={item.label}
+              className={`px-4 py-3.5 ${i > 0 ? 'border-border sm:border-l' : ''} ${
+                i % 2 === 1 ? 'border-l border-border sm:border-l' : ''
+              } ${i > 1 ? 'border-t border-border sm:border-t-0' : ''}`}
+            >
+              <dt className="font-display text-lg font-bold text-primary tabular-nums">
+                {String(item.value).padStart(2, '0')}
+              </dt>
+              <dd className="mt-0.5 font-mono text-[11px] leading-snug tracking-wide text-text-dim uppercase">
+                {item.label}
+              </dd>
+            </div>
+          ))}
+        </motion.dl>
+
         {/* ---------- Recognition: the editorial lead of this section ---------- */}
         <div>
           <GroupHeading Icon={FaAward} title="Recognition" count={research.recognition.length} />

@@ -9,15 +9,18 @@ import Certifications from './components/Certifications'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import ParticleBackground from './components/ParticleBackground'
+import CursorGlow from './components/CursorGlow'
 
 function App() {
   return (
     <div className="min-h-screen">
-      {/* Layered ambient backdrop: static grid + accent vignette + particle field */}
+      {/* Layered ambient backdrop: static grid + accent vignette + grain +
+          particle field + pointer light. All decorative, all pointer-inert. */}
       <div className="grid-backdrop" aria-hidden="true" />
       <div className="vignette" aria-hidden="true" />
       <div className="grain" aria-hidden="true" />
       <ParticleBackground />
+      <CursorGlow />
 
       <a
         href="#main"

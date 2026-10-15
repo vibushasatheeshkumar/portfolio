@@ -7,6 +7,13 @@ export default function Section({ id, index, title, kicker, intro, children }) {
 
   return (
     <section id={id} className="relative mx-auto max-w-6xl scroll-mt-24 px-6 py-20 sm:py-28">
+      {/* Alternating ambient wash so sections read as distinct bands */}
+      <span
+        aria-hidden="true"
+        className={`section-wash ${index % 3 === 2 ? 'section-wash-cyan' : ''}`}
+        style={{ '--wash-x': index % 2 === 0 ? '78%' : '22%' }}
+      />
+
       {title && (
         <motion.div
           className="relative mb-12"

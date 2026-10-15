@@ -471,3 +471,59 @@ body {
     animation: none;
   }
 }
+
+/* ---------- Section washes & dividers ---------- */
+
+/* A very soft accent bloom anchored to one side of a section, alternating down
+   the page so major sections read as distinct bands without hard seams. */
+.section-wash {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 65% 45% at var(--wash-x, 50%) 0%,
+    rgba(78, 240, 141, 0.032),
+    transparent 70%
+  );
+}
+
+.section-wash-cyan {
+  background: radial-gradient(
+    ellipse 65% 45% at var(--wash-x, 50%) 0%,
+    rgba(34, 211, 238, 0.028),
+    transparent 70%
+  );
+}
+
+/* Small live-looking status pip used on technical labels. Decorative. */
+.status-dot {
+  position: relative;
+  display: inline-block;
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 9999px;
+  background: var(--color-primary);
+}
+
+.status-dot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--color-primary);
+  animation: pulse-ring 3s var(--ease-out-expo) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status-dot::after {
+    display: none;
+  }
+}
+
+/* Decorative project diagrams stretch to fill bands of any width; keeping the
+   stroke un-scaled stops lines looking smeared at wide aspect ratios. */
+.diagram,
+.diagram * {
+  vector-effect: non-scaling-stroke;
+}

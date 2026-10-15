@@ -7,6 +7,7 @@ import {
   FaArrowUpRightFromSquare,
 } from 'react-icons/fa6'
 import Section from './Section'
+import ProjectVisual from './ProjectVisuals'
 import { projects } from '../data'
 import { pick, riseIn, stagger, viewportOnce } from '../motion'
 import useSpotlight from '../useSpotlight'
@@ -17,7 +18,14 @@ const projectIcons = {
   MallnSight: FaFileShield,
 }
 
-const TILT = 6 // max degrees of rotation
+// Short technical descriptor shown as the card's eyebrow label.
+const projectDomains = {
+  'CogniShield AI': 'threat intelligence',
+  Watchtower: 'detection engineering',
+  MallnSight: 'static analysis',
+}
+
+const TILT = 6
 const SPRING = { stiffness: 220, damping: 22, mass: 0.6 }
 
 const CORNERS = [
@@ -32,7 +40,7 @@ const CORNERS = [
  * interactive elements and the card is reachable with Tab. Pointer tilt and
  * lighting are mouse-only and are skipped under reduced motion.
  */
-function ProjectCard({ project, index }) {
+function ProjectCard({ project, index, feature }) {
   const Icon = projectIcons[project.name] || FaSatelliteDish
   const reduced = useReducedMotion()
   const spotlight = useSpotlight()
@@ -50,8 +58,7 @@ function ProjectCard({ project, index }) {
     py.set((event.clientY - rect.top) / rect.height - 0.5)
   }
 
-  const handlePointerLeave = (event) => {
-    spotlight.onPointerLeave(event)
+  const resetTilt = () => {
     px.set(0)
     py.set(0)
   }
@@ -64,32 +71,54 @@ function ProjectCard({ project, index }) {
       aria-label={`${project.name} — ${project.tagline}. Opens the GitHub repository in a new tab.`}
       variants={pick(riseIn, reduced)}
       onPointerMove={handlePointerMove}
-      onPointerLeave={handlePointerLeave}
-      onBlur={() => {
-        px.set(0)
-        py.set(0)
+      onPointerLeave={(event) => {
+        spotlight.onPointerLeave(event)
+        resetTilt()
       }}
+      onBlur={resetTilt}
       whileHover={reduced ? undefined : { y: -8 }}
       transition={{ type: 'spring', ...SPRING }}
       style={reduced ? undefined : { rotateX, rotateY, transformPerspective: 1000 }}
-      className="panel elev-1 card-ring spotlight group relative flex flex-col rounded-xl p-6 transition-shadow duration-300 hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.07),0_28px_60px_-28px_rgba(0,0,0,0.95),0_0_40px_-22px_var(--color-primary)]"
+      className={`panel elev-1 card-ring spotlight group relative flex flex-col rounded-xl p-6 transition-shadow duration-300 hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.07),0_28px_60px_-28px_rgba(0,0,0,0.95),0_0_40px_-22px_var(--color-primary)] ${
+        feature ? 'lg:col-span-2' : ''
+      }`}
     >
       <span className="edge-accent" aria-hidden="true" />
       {CORNERS.map((position) => (
         <span key={position} className={`corner ${position}`} aria-hidden="true" />
       ))}
 
+      {/* Eyebrow: index + domain + status dot */}
+      <div className="relative mb-4 flex items-center gap-2.5 font-mono text-[11px] tracking-[0.14em] text-text-dim uppercase">
+        <span className="tabular-nums text-primary">{String(index + 1).padStart(2, '0')}</span>
+        <span className="h-px w-5 bg-border-strong" aria-hidden="true" />
+        <span>{projectDomains[project.name]}</span>
+        <span className="ml-auto flex items-center gap-1.5">
+          <span
+            aria-hidden="true"
+            className="h-1.5 w-1.5 rounded-full bg-primary/60 transition-colors duration-300 group-hover:bg-primary"
+          />
+          <span className="normal-case">open source</span>
+        </span>
+      </div>
+
+      {/* Per-project decorative motif */}
+      <div className="relative mb-5">
+        <ProjectVisual name={project.name} tall={feature} />
+      </div>
+
       <div className="relative flex items-start gap-3.5">
         <span className="panel-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-primary transition-colors duration-300 group-hover:border-primary-line">
           <Icon size={17} aria-hidden="true" />
         </span>
         <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
-            <h3 className="font-display text-lg font-semibold text-heading">{project.name}</h3>
-            <span className="font-mono text-[10px] text-text-dim" aria-hidden="true">
-              {String(index + 1).padStart(2, '0')}
-            </span>
-          </div>
+          <h3
+            className={`font-display font-semibold text-heading ${
+              feature ? 'text-xl sm:text-2xl' : 'text-lg'
+            }`}
+          >
+            {project.name}
+          </h3>
           <p className="mt-1 font-mono text-[11px] leading-snug text-primary">{project.tagline}</p>
         </div>
         <FaArrowUpRightFromSquare
@@ -99,9 +128,16 @@ function ProjectCard({ project, index }) {
         />
       </div>
 
-      <ul className="relative mt-5 flex-1 space-y-2.5 text-sm leading-relaxed text-text">
+      <ul
+        className={`relative mt-5 flex-1 space-y-2.5 text-sm leading-relaxed text-text ${
+          feature ? 'sm:columns-2 sm:gap-6 sm:space-y-0' : ''
+        }`}
+      >
         {project.points.map((point) => (
-          <li key={point} className="flex gap-2.5">
+          <li
+            key={point}
+            className={`flex gap-2.5 ${feature ? 'sm:mb-2.5 sm:break-inside-avoid' : ''}`}
+          >
             <span
               aria-hidden="true"
               className="mt-[0.45rem] h-1 w-1 shrink-0 rounded-full bg-primary/60 transition-colors duration-300 group-hover:bg-primary"
@@ -141,17 +177,17 @@ export default function Projects() {
       index={3}
       title="Projects"
       kicker="builds"
-      intro="Security tooling I have built end to end. Each card links to its source on GitHub."
+      intro="Security tooling I have built end to end. Each card links to its source on GitHub; the diagrams are abstract illustrations of the problem each project works on, not application screenshots."
     >
       <motion.div
-        variants={stagger(0.12)}
+        variants={stagger(0.13)}
         initial="hidden"
         whileInView="show"
         viewport={viewportOnce}
-        className="grid gap-5 md:grid-cols-2 lg:grid-cols-3"
+        className="grid gap-5 md:grid-cols-2 lg:grid-cols-2"
       >
         {projects.map((project, i) => (
-          <ProjectCard key={project.name} project={project} index={i} />
+          <ProjectCard key={project.name} project={project} index={i} feature={i === 0} />
         ))}
       </motion.div>
     </Section>

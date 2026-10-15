@@ -4,8 +4,12 @@
 
 export const EASE = [0.22, 1, 0.36, 1]
 
-export const viewportOnce = { once: true, amount: 0.2 }
-export const viewportEarly = { once: true, amount: 0.05 }
+// `margin` expands the IntersectionObserver root well beyond the viewport.
+// Without it a fast scroll (or an anchor jump) can move a small element from
+// below the viewport to above it between observer callbacks, so `isIntersecting`
+// never becomes true and the element stays at its hidden variant.
+export const viewportOnce = { once: true, amount: 0.2, margin: '300px 0px 300px 0px' }
+export const viewportEarly = { once: true, amount: 0.05, margin: '300px 0px 300px 0px' }
 
 export const fadeUp = {
   hidden: { opacity: 0, y: 24 },
