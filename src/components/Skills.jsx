@@ -1,8 +1,15 @@
-import { motion } from 'framer-motion'
-import { FaShieldHalved, FaMagnifyingGlassChart, FaScrewdriverWrench, FaServer, FaCode } from 'react-icons/fa6'
+import { motion, useReducedMotion } from 'framer-motion'
+import {
+  FaShieldHalved,
+  FaMagnifyingGlassChart,
+  FaScrewdriverWrench,
+  FaServer,
+  FaCode,
+} from 'react-icons/fa6'
 import Section from './Section'
 import { skillGroups } from '../data'
 import { skillIcons, defaultSkillIcon } from '../skillIcons'
+import { fadeUp, pick, stagger, viewportOnce } from '../motion'
 
 const groupIcons = {
   Security: FaShieldHalved,
@@ -13,43 +20,59 @@ const groupIcons = {
 }
 
 export default function Skills() {
+  const reduced = useReducedMotion()
+
   return (
-    <Section id="skills" title="Technical Skills" shapeVariant={0}>
-      <div className="grid gap-6 sm:grid-cols-2">
+    <Section id="skills" index={2} title="Technical Skills" kicker="toolchain">
+      <motion.div
+        variants={stagger(0.08)}
+        initial="hidden"
+        whileInView="show"
+        viewport={viewportOnce}
+        className="grid gap-4 sm:grid-cols-2"
+      >
         {skillGroups.map((group) => {
           const GroupIcon = groupIcons[group.label] || FaCode
           return (
-            <div
+            <motion.div
               key={group.label}
-              className="rounded-xl border border-border bg-surface p-5 transition-colors hover:border-primary/40"
+              variants={pick(fadeUp, reduced)}
+              className="panel card-ring rounded-xl p-5 transition-colors duration-300 hover:border-border-strong"
             >
-              <div className="mb-4 flex items-center gap-3">
-                <span className="gradient-bg flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-white">
-                  <GroupIcon size={18} />
+              <div className="mb-5 flex items-center gap-3">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-surface-2 text-primary">
+                  <GroupIcon size={15} />
                 </span>
-                <h3 className="font-display text-sm font-semibold text-heading">
+                <h3 className="font-display text-sm font-semibold tracking-wide text-heading">
                   {group.label}
                 </h3>
+                <span className="ml-auto font-mono text-[11px] text-text-dim">
+                  {String(group.skills.length).padStart(2, '0')}
+                </span>
               </div>
+
               <div className="flex flex-wrap gap-2">
                 {group.skills.map((skill) => {
                   const Icon = skillIcons[skill] || defaultSkillIcon
                   return (
-                    <motion.span
+                    <span
                       key={skill}
-                      whileHover={{ scale: 1.06, y: -2 }}
-                      className="flex items-center gap-1.5 rounded-full border border-border bg-surface-2 px-3 py-1.5 font-mono text-xs text-text transition-colors hover:border-primary/50"
+                      className="group/chip flex items-center gap-1.5 rounded-md border border-border bg-surface-2 px-2.5 py-1.5 font-mono text-[11px] text-text transition-all duration-300 hover:-translate-y-0.5 hover:border-primary-line hover:text-heading"
                     >
-                      <Icon className="text-secondary" size={13} />
+                      <Icon
+                        className="text-text-dim transition-colors duration-300 group-hover/chip:text-primary"
+                        size={12}
+                        aria-hidden="true"
+                      />
                       {skill}
-                    </motion.span>
+                    </span>
                   )
                 })}
               </div>
-            </div>
+            </motion.div>
           )
         })}
-      </div>
+      </motion.div>
     </Section>
   )
 }

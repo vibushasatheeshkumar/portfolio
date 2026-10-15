@@ -15,7 +15,22 @@ import {
   SiMetasploit,
   SiElastic,
 } from 'react-icons/si'
-import { FaJava, FaDatabase, FaTerminal, FaShieldHalved, FaNetworkWired } from 'react-icons/fa6'
+import {
+  FaJava,
+  FaDatabase,
+  FaTerminal,
+  FaShieldHalved,
+  FaNetworkWired,
+  FaFileShield,
+  FaCrosshairs,
+  FaFilter,
+  FaBug,
+  FaMagnifyingGlassChart,
+  FaBell,
+  FaUserShield,
+  FaBugSlash,
+  FaClipboardCheck,
+} from 'react-icons/fa6'
 
 export const skillIcons = {
   'OWASP Top 10': SiOwasp,
@@ -38,6 +53,18 @@ export const skillIcons = {
   Nmap: FaNetworkWired,
   Nessus: FaShieldHalved,
   Sysmon: FaTerminal,
+  Sigma: FaFilter,
+  'MITRE ATT&CK': FaCrosshairs,
+  YARA: FaFileShield,
+  'Static Malware Analysis': FaBugSlash,
+  'Responsible Disclosure': FaClipboardCheck,
+  'Penetration Testing': FaBug,
+  'Vulnerability Assessment': FaMagnifyingGlassChart,
+  'API Security Testing': FaUserShield,
+  'Detection Engineering': FaFilter,
+  'Security Monitoring': FaMagnifyingGlassChart,
+  'Incident Investigation': FaMagnifyingGlassChart,
+  'Alert Management': FaBell,
 }
 
 export const defaultSkillIcon = FaShieldHalved

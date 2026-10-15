@@ -1,10 +1,11 @@
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
+import About from './components/About'
 import Skills from './components/Skills'
 import Projects from './components/Projects'
+import Research from './components/Research'
 import Experience from './components/Experience'
 import Certifications from './components/Certifications'
-import Achievements from './components/Achievements'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import ParticleBackground from './components/ParticleBackground'
@@ -12,17 +13,34 @@ import ParticleBackground from './components/ParticleBackground'
 function App() {
   return (
     <div className="min-h-screen">
+      {/* Layered ambient backdrop: static grid + accent vignette + particle field */}
+      <div className="grid-backdrop" aria-hidden="true" />
+      <div className="vignette" aria-hidden="true" />
       <ParticleBackground />
+
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:font-mono focus:text-sm focus:font-semibold focus:text-bg"
+      >
+        Skip to content
+      </a>
+
       <Navbar />
-      <main>
+
+      <main id="main">
         <Hero />
+        <span className="hairline mx-auto block max-w-6xl" aria-hidden="true" />
+        <About />
         <Skills />
+        <span className="hairline mx-auto block max-w-6xl" aria-hidden="true" />
         <Projects />
+        <Research />
+        <span className="hairline mx-auto block max-w-6xl" aria-hidden="true" />
         <Experience />
         <Certifications />
-        <Achievements />
         <Contact />
       </main>
+
       <Footer />
     </div>
   )

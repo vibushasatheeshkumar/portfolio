@@ -1,37 +1,56 @@
-import { motion } from 'framer-motion'
-import FloatingShapes from './FloatingShapes'
+import { motion, useReducedMotion } from 'framer-motion'
+import { fadeUp, pick, stagger, viewportOnce } from '../motion'
 
-const shapeSets = [
-  [
-    { type: 'square', top: '10%', left: '2%', size: 22, color: 'primary', delay: '0s' },
-    { type: 'diamond', bottom: '12%', right: '4%', size: 18, color: 'secondary', delay: '1s' },
-  ],
-  [
-    { type: 'diamond', top: '15%', right: '6%', size: 20, color: 'primary', delay: '0.4s' },
-    { type: 'circle', bottom: '20%', left: '6%', size: 12, color: 'secondary', delay: '1.4s' },
-  ],
-]
+export default function Section({ id, index, title, kicker, intro, children }) {
+  const reduced = useReducedMotion()
 
-export default function Section({ id, title, children, shapeVariant = 0 }) {
   return (
-    <motion.section
-      id={id}
-      className="relative mx-auto max-w-5xl px-6 py-20 scroll-mt-20"
-      initial={{ opacity: 0, y: 32 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
-    >
-      <FloatingShapes shapes={shapeSets[shapeVariant % shapeSets.length]} />
+    <section id={id} className="relative mx-auto max-w-6xl scroll-mt-24 px-6 py-20 sm:py-28">
       {title && (
-        <div className="relative mb-10">
-          <h2 className="font-display text-3xl font-bold text-heading sm:text-4xl">
+        <motion.div
+          className="relative mb-12"
+          variants={stagger(0.07)}
+          initial="hidden"
+          whileInView="show"
+          viewport={viewportOnce}
+        >
+          <motion.div
+            variants={pick(fadeUp, reduced)}
+            className="flex items-center gap-3 font-mono text-xs tracking-[0.18em] text-text-dim uppercase"
+          >
+            {index != null && <span className="text-primary">{String(index).padStart(2, '0')}</span>}
+            <span className="h-px w-8 bg-border-strong" aria-hidden="true" />
+            <span>{kicker || title}</span>
+          </motion.div>
+
+          <motion.h2
+            variants={pick(fadeUp, reduced)}
+            className="font-display mt-4 text-3xl font-bold text-heading sm:text-5xl"
+          >
             {title}
-          </h2>
-          <span className="mt-3 block h-1 w-14 rounded-full gradient-bg" />
-        </div>
+          </motion.h2>
+
+          <motion.span
+            aria-hidden="true"
+            className="accent-rule mt-5 block w-24 origin-left rounded-full"
+            initial={reduced ? false : { scaleX: 0 }}
+            whileInView={reduced ? undefined : { scaleX: 1 }}
+            viewport={viewportOnce}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+          />
+
+          {intro && (
+            <motion.p
+              variants={pick(fadeUp, reduced)}
+              className="text-balance mt-6 max-w-2xl text-base leading-relaxed text-text"
+            >
+              {intro}
+            </motion.p>
+          )}
+        </motion.div>
       )}
+
       <div className="relative">{children}</div>
-    </motion.section>
+    </section>
   )
 }
